@@ -12,7 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
   amap_core_fluttify: ^0.8.0
-  foundation_fluttify: ^0.7.3
+  foundation_fluttify: #^0.7.3
+    git:
+      url: https://github.com/ls-andy/foundation_fluttify.git
   core_location_fluttify: ^0.1.0-dev.1
 
 dev_dependencies:
