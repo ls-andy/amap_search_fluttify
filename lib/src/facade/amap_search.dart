@@ -329,7 +329,7 @@ mixin _Community on _Holder {
     // ignore: close_sinks
     final _controller = Completer<ReGeocode>();
 
-    platform(
+    await platform(
       android: (pool) async {
         // 创建中心点
         final latLngPoint = await com_amap_api_services_core_LatLonPoint
@@ -344,7 +344,7 @@ mixin _Community on _Holder {
         final context = await android_app_Activity.get();
 
         // 创建搜索对象
-        _androidGeocodeSearch =
+        com_amap_api_services_geocoder_GeocodeSearch _androidGeocodeSearch =
             await com_amap_api_services_geocoder_GeocodeSearch
                 .create__android_content_Context(context);
 
@@ -355,11 +355,13 @@ mixin _Community on _Holder {
         // 开始搜索
         await _androidGeocodeSearch.getFromLocationAsyn(query);
 
+        await _androidGeocodeSearch?.release__();
+
         // 局部变量从HEAP中解除引用
         pool..add(latLngPoint)..add(query);
       },
       ios: (pool) async {
-        _iosSearch = await AMapSearchAPI.create__();
+        AMapSearchAPI _iosSearch = await AMapSearchAPI.create__();
 
         // 创建中心点
         final amapLocation = await AMapGeoPoint.create__();
@@ -381,6 +383,8 @@ mixin _Community on _Holder {
 
         // 开始搜索
         await _iosSearch.AMapReGoecodeSearch(request);
+
+        await _iosSearch?.release__();
 
         // 局部变量从HEAP中解除引用
         pool..add(amapLocation)..add(request);
