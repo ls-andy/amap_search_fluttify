@@ -171,9 +171,10 @@ class _AndroidSearchListener extends java_lang_Object
 
 /// ios: 搜索监听
 class _IOSSearchListener extends NSObject with AMapSearchDelegate {
-  _IOSSearchListener(this._completer);
+  _IOSSearchListener(this._completer, {this.iosSearch});
 
   final Completer _completer;
+  final AMapSearchAPI iosSearch;
 
   @override
   Future<void> onPOISearchDone_response(
@@ -260,6 +261,9 @@ class _IOSSearchListener extends NSObject with AMapSearchDelegate {
     super.onReGeocodeSearchDone_response(request, response);
     final reGeocode = ReGeocode.ios(await response.get_regeocode());
     _completer?.complete(reGeocode);
+    if (iosSearch != null) {
+      await iosSearch.release__();
+    }
   }
 
   @override

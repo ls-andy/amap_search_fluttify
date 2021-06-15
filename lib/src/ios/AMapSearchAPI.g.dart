@@ -52,10 +52,15 @@ class AMapSearchAPI extends NSObject  {
   //endregion
 
   //region setters
-  Future<void> set_delegate(AMapSearchDelegate delegate) async {
+  Future<void> set_delegate(AMapSearchDelegate delegate, {LatLng latLng,}) async {
     await MethodChannel('me.yohom/amap_search_fluttify', StandardMethodCodec(FluttifyMessageCodec('amap_search_fluttify'))).invokeMethod('AMapSearchAPI::set_delegate', <String, dynamic>{'__this__': this, });
-  
-    MethodChannel('AMapSearchDelegate::Callback', StandardMethodCodec(FluttifyMessageCodec('amap_search_fluttify')))
+    final count = (latLng.latitude + latLng.longitude).toStringAsFixed(6);
+    final name = 'AMapSearchDelegate::Callback.$count';
+    if (fluttifyLogEnabled) {
+      debugPrint('set_delegate channel -> ${latLng.latitude}, ${latLng.longitude}, $name');
+    }
+    MethodChannel(name,
+        StandardMethodCodec(FluttifyMessageCodec('amap_search_fluttify')))
       .setMethodCallHandler((methodCall) async {
         try {
           final args = methodCall.arguments as Map;

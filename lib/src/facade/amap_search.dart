@@ -369,7 +369,9 @@ mixin _Community on _Holder {
         await amapLocation.set_longitude(latLng.longitude);
 
         // 设置回调
-        await _iosSearch.set_delegate(_IOSSearchListener(_controller));
+        await _iosSearch.set_delegate(
+          _IOSSearchListener(_controller, iosSearch: _iosSearch),
+          latLng: LatLng(await amapLocation.get_latitude(), await amapLocation.get_longitude()),);
 
         // 创建搜索请求
         final request = await AMapReGeocodeSearchRequest.create__();
@@ -383,8 +385,6 @@ mixin _Community on _Holder {
 
         // 开始搜索
         await _iosSearch.AMapReGoecodeSearch(request);
-
-        await _iosSearch?.release__();
 
         // 局部变量从HEAP中解除引用
         pool..add(amapLocation)..add(request);

@@ -257,13 +257,15 @@ extern BOOL enableLog;
 
 - (void)onReGeocodeSearchDone : (AMapReGeocodeSearchRequest*)request response: (AMapReGeocodeSearchResponse*)response
 {
+  CGFloat a = request.location.latitude + request.location.longitude;
+  NSString *name = [NSString stringWithFormat: @"AMapSearchDelegate::Callback.%f", a];
   FlutterMethodChannel *channel = [FlutterMethodChannel
-        methodChannelWithName:@"AMapSearchDelegate::Callback"
+        methodChannelWithName: name
               binaryMessenger:[_registrar messenger]
                         codec:[FlutterStandardMethodCodec codecWithReaderWriter:[[FluttifyReaderWriter alloc] init]]];
   // print log
   if (enableLog) {
-    NSLog(@"AMapSearchDelegate::onReGeocodeSearchDone_response");
+    NSLog(@"AMapSearchDelegate::onReGeocodeSearchDone_response channel: -> %f, %f, %@", request.location.latitude, request.location.longitude, name);
   }
 
   // convert to jsonable arg
